@@ -62,6 +62,7 @@ The (filtered) list of modules in the namespace.  Lazily generated.
 role {
     my ($p, %opts) = @_;
 
+    use MooseX::AttributeShortcuts;
     use MooseX::Types::LoadableClass ':all';
     use MooseX::Types::Moose         ':all';
     use MooseX::Types::Perl          ':all';
@@ -76,6 +77,7 @@ role {
     my $all_mods_attribute = "modules_in_${prefix}namespace";
 
     has $ns_attribute => (
+        traits  => [Shortcuts],
         is  => 'lazy',
         isa => PackageName,
         ( $p->has_default_namespace
@@ -85,6 +87,7 @@ role {
     );
 
     has $all_mods_attribute => (
+        traits  => [Shortcuts],
         is      => 'lazy',
         isa     => ArrayRef[PackageName],
         builder => sub{

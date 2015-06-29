@@ -1,0 +1,108 @@
+[![Build Status](https://travis-ci.org/RsrchBoy/moosex-relatednamespace.svg?branch=master)](https://travis-ci.org/RsrchBoy/moosex-relatednamespace)
+[![Kwalitee status](http://cpants.cpanauthors.org/dist/MooseX-RelatedNamespace.png)](http://cpants.charsbar.org/dist/overview/MooseX-RelatedNamespace)
+[![Coverage Status](https://coveralls.io/repos/RsrchBoy/moosex-relatednamespace/badge.png?branch=master)](https://coveralls.io/r/RsrchBoy/moosex-relatednamespace?branch=master)
+
+# NAME
+
+MooseX::RelatedNamespace - The great new MooseX::RelatedNamespace!
+
+# VERSION
+
+This document describes version 0.001 of MooseX::RelatedNamespace - released June 29, 2015 as part of MooseX-RelatedNamespace.
+
+# SYNOPSIS
+
+    package Dalek::Enemies;
+
+    use Moose;
+
+    # this...
+    with 'MooseX::RelatedNamespace' => {
+        prefix    => 'doctor',
+        namespace => 'TimeLords::Doctor',
+    };
+
+    # ...is the same as:
+    use MooseX::AttributeShortcuts; # for these attributes, at any rate
+    use MooseX::Types::Perl ':all';
+
+    has doctor_namespace => (
+        is  => 'lazy',
+        isa => PackageName, 
+        builder => sub { 'TimeLords::Doctor' },
+    );
+
+    has modules_in_doctor_namespace => (
+        is      => 'lazy',
+        isa     => ArrayRef[PackageName],
+        builder => sub { ... }, 
+    );
+
+# DESCRIPTION
+
+# ROLE PARAMETERS
+
+Parameterized roles accept parameters that influence their construction.  This role accepts the following parameters.
+
+## prefix
+
+A prefix for our attribute names; e.g. 'doctor\_' to make our namespace
+attribute's name be 'doctor\_namespace', etc.
+
+## default\_namespace
+
+If we should have a default namespace, specify it here.
+
+## filter
+
+A coderef used to filter out modules found under the namespace; it should return true for
+modules to keep, false for modules to drop.
+
+# ATTRIBUTES
+
+## namespace
+
+The namespace we use to find packages; e.g. 'TimeLord::Doctor' to find
+'TimeLord::Doctor::First', etc.
+
+## modules\_in\_namespace
+
+The (filtered) list of modules in the namespace.  Lazily generated.
+
+# BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+https://github.com/RsrchBoy/moosex-relatednamespace/issues
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
+# AUTHOR
+
+Chris Weyl <cweyl@alumni.drew.edu>
+
+## I'm a material boy in a material world
+
+<div>
+    <a href="https://gratipay.com/RsrchBoy/"><img src="http://img.shields.io/gratipay/RsrchBoy.svg" /></a>
+    <a href="http://bit.ly/rsrchboys-wishlist"><img src="http://wps.io/wp-content/uploads/2014/05/amazon_wishlist.resized.png" /></a>
+    <a href="https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fmoosex-relatednamespace&title=RsrchBoy's%20CPAN%20MooseX-RelatedNamespace&tags=%22RsrchBoy's%20MooseX-RelatedNamespace%20in%20the%20CPAN%22"><img src="http://api.flattr.com/button/flattr-badge-large.png" /></a>
+</div>
+
+Please note **I do not expect to be gittip'ed or flattr'ed for this work**,
+rather **it is simply a very pleasant surprise**. I largely create and release
+works like this because I need them or I find it enjoyable; however, don't let
+that stop you if you feel like it ;)
+
+[Flattr](https://flattr.com/submit/auto?user_id=RsrchBoy&url=https%3A%2F%2Fgithub.com%2FRsrchBoy%2Fmoosex-relatednamespace&title=RsrchBoy&#x27;s%20CPAN%20MooseX-RelatedNamespace&tags=%22RsrchBoy&#x27;s%20MooseX-RelatedNamespace%20in%20the%20CPAN%22),
+[Gratipay](https://gratipay.com/RsrchBoy/), or indulge my
+[Amazon Wishlist](http://bit.ly/rsrchboys-wishlist)...  If and \*only\* if you so desire.
+
+# COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2015 by Chris Weyl.
+
+This is free software, licensed under:
+
+    The GNU Lesser General Public License, Version 2.1, February 1999

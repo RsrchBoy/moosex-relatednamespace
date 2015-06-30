@@ -53,6 +53,11 @@ parameter filter => (
 The namespace we use to find packages; e.g. 'TimeLord::Doctor' to find
 'TimeLord::Doctor::First', etc.
 
+=attr filter_for_namespace
+
+A coderef used to filter out modules found under the namespace; it should return true for
+modules to keep, false for modules to drop.
+
 =attr modules_in_namespace
 
 The (filtered) list of modules in the namespace.  Lazily generated.
@@ -75,6 +80,7 @@ role {
     # attribute names -- the better to not repeat ourselves
     my $ns_attribute       = "${prefix}namespace";
     my $all_mods_attribute = "modules_in_${prefix}namespace";
+    my $filter_attribute   = "filter_for_${prefix}namespace";
 
     has $ns_attribute => (
         traits  => [Shortcuts],
@@ -86,6 +92,13 @@ role {
         ),
     );
 
+    has $filter_attribute => (
+        traits  => [Shortcuts],
+        is      => 'lazy',
+        isa     => CodeRef,
+        builder => sub { $p->filter },
+    );
+
     has $all_mods_attribute => (
         traits  => [Shortcuts],
         is      => 'lazy',
@@ -95,7 +108,7 @@ role {
 
             # find/use all packages in namespace; then filter
             my @mods = sort
-                grep { $p->filter->($_) }
+                grep { $self->$filter_attribute->($_) }
                 Module::Find::useall($self->$ns_attribute())
             ;
 

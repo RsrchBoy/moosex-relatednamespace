@@ -28,14 +28,14 @@ This document describes version 0.001 of MooseX::RelatedNamespace - released Jun
 
     has doctor_namespace => (
         is  => 'lazy',
-        isa => PackageName, 
+        isa => PackageName,
         builder => sub { 'TimeLords::Doctor' },
     );
 
     has modules_in_doctor_namespace => (
         is      => 'lazy',
         isa     => ArrayRef[PackageName],
-        builder => sub { ... }, 
+        builder => sub { ... },
     );
 
 # DESCRIPTION
@@ -64,6 +64,11 @@ modules to keep, false for modules to drop.
 
 The namespace we use to find packages; e.g. 'TimeLord::Doctor' to find
 'TimeLord::Doctor::First', etc.
+
+## filter\_for\_namespace
+
+A coderef used to filter out modules found under the namespace; it should return true for
+modules to keep, false for modules to drop.
 
 ## modules\_in\_namespace
 

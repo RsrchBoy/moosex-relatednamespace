@@ -83,9 +83,9 @@ role {
     my $filter_attribute   = "filter_for_${prefix}namespace";
 
     has $ns_attribute => (
-        traits  => [Shortcuts],
-        is  => 'lazy',
-        isa => PackageName,
+        traits => [Shortcuts],
+        is     => 'lazy',
+        isa    => PackageName,
         ( $p->has_default_namespace
             ? (builder  => sub { $p->default_namespace })
             : (required => 1)
@@ -135,12 +135,19 @@ __END__
 
     # ...is the same as:
     use MooseX::AttributeShortcuts; # for these attributes, at any rate
+    use MooseX::Types::Moose ':all';
     use MooseX::Types::Perl ':all';
 
     has doctor_namespace => (
-        is  => 'lazy',
-        isa => PackageName,
+        is      => 'lazy',
+        isa     => PackageName,
         builder => sub { 'TimeLords::Doctor' },
+    );
+
+    has filter_for_doctor_namespace => (
+        is      => 'lazy',
+        isa     => CodeRef,
+        builder => sub { sub { 1 } },
     );
 
     has modules_in_doctor_namespace => (
@@ -150,6 +157,41 @@ __END__
     );
 
 =head1 DESCRIPTION
+
+=head1 EXAMPLES
+
+There's a decent example in the L</SYNOPSIS>, but here's a couple variations to demonstrate.
+
+=head1 Defaults
+
+You can use this role without giving it any parameters, and defaults will be used.  In our case,
+this means that this:
+
+    with 'MooseX::RelatedNamespace';
+
+...is effectively the same as:
+
+    use MooseX::AttributeShortcuts;
+    use MooseX::Types::Moose ':all';
+    use MooseX::Types::Perl ':all';
+
+    has namespace => (
+        is       => 'ro',
+        isa      => PackageName,
+        required => 1,
+    );
+
+    has filter_for_namespace => (
+        is      => 'lazy',
+        isa     => 'CodeRef',
+        builder => sub { sub { 1 } } ,
+    );
+
+    has modules_in_namespace => (
+        is      => 'lazy',
+        isa     => ArrayRef[PackageName],
+        builder => sub { ... find/load all modules, filtering ... },
+    );
 
 =head1 SEE ALSO
 

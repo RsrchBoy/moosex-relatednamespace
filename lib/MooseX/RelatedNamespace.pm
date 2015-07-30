@@ -78,9 +78,9 @@ role {
     $prefix .= '_' if $prefix ne q{};
 
     # attribute names -- the better to not repeat ourselves
-    my $ns_attribute       = "${prefix}namespace";
-    my $all_mods_attribute = "modules_in_${prefix}namespace";
-    my $filter_attribute   = "filter_for_${prefix}namespace";
+    my $ns_attribute            = "${prefix}namespace";
+    my $modules_in_ns_attribute = "modules_in_${prefix}namespace";
+    my $filter_attribute        = "filter_for_${prefix}namespace";
 
     has $ns_attribute => (
         traits => [Shortcuts],
@@ -99,7 +99,7 @@ role {
         builder => sub { $p->filter },
     );
 
-    has $all_mods_attribute => (
+    has $modules_in_ns_attribute => (
         traits  => [Shortcuts],
         is      => 'lazy',
         isa     => ArrayRef[PackageName],

@@ -87,8 +87,8 @@ role {
         is     => 'lazy',
         isa    => PackageName,
         ( $p->has_default_namespace
-            ? (builder  => sub { $p->default_namespace })
-            : (required => 1)
+            ? (builder => sub { $p->default_namespace })
+            : (builder => sub { undef                 })
         ),
     );
 

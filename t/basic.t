@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Test::More;
-use Test::Moose::More;
+use Test::Moose::More 0.033;
 
 {
     package TR;
@@ -15,33 +15,20 @@ use Test::Moose::More;
     with 'MooseX::RelatedNamespace';
 }
 
-subtest 'structural: composed in role' => sub {
-    validate_role TR => (
-        attributes => [
-            'namespace',
-            'modules_in_namespace',
-        ],
-        methods => [],
-    );
-};
-
-subtest 'structural: composed in class' => sub {
-    validate_class TC => (
-        attributes => [
-            'namespace',
-            'modules_in_namespace',
-        ],
-        methods => [],
-    );
-};
+validate_role TR => (
+    -compose => 1,
+    attributes => [
+        namespace            => { is => 'ro' },
+        modules_in_namespace => { is => 'ro' },
+        filter_for_namespace => { is => 'ro', lazy => 1, isa => 'CodeRef' },
+    ],
+);
 
 subtest 'simple role test' => sub {
 
     use lib 't/lib';
 
     my $ns = 'NS::One';
-    #my $c = TC->new(namespace => 'NS::One');
-    #isa_ok $c, 'TC';
 
     subtest 'attribute: modules_in_namespace' => sub {
 

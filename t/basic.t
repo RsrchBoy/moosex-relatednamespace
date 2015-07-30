@@ -4,56 +4,16 @@ use warnings;
 use Test::More;
 use Test::Moose::More 0.033;
 
-{
-    package TR;
-    use Moose::Role;
-    with 'MooseX::RelatedNamespace';
-}
-{
-    package TC;
-    use Moose;
-    with 'MooseX::RelatedNamespace';
-}
+{ package TR; use Moose::Role; with 'MooseX::RelatedNamespace'; }
+{ package TC; use Moose;       with 'MooseX::RelatedNamespace'; }
 
 validate_role TR => (
     -compose => 1,
     attributes => [
-        namespace            => { is => 'ro' },
+        namespace            => { is => 'ro', lazy => 1, builder => '_build_namespace' },
         modules_in_namespace => { is => 'ro' },
         filter_for_namespace => { is => 'ro', lazy => 1, isa => 'CodeRef' },
     ],
 );
-
-subtest 'simple role test' => sub {
-
-    use lib 't/lib';
-
-    my $ns = 'NS::One';
-
-    subtest 'attribute: modules_in_namespace' => sub {
-
-        my $c = TC->new(namespace => $ns);
-        is_deeply
-            $c->modules_in_namespace,
-            [ sort map { "${ns}::$_" } qw{ A B C } ],
-            'found all our modules in namespace...',
-        ;
-
-    };
-
-    subtest 'filter modules' => sub {
-
-        my $c = TC->new(
-            namespace => $ns,
-            filter_for_namespace => sub { $_[0] ne "${ns}::B" },
-        );
-        is_deeply
-            $c->modules_in_namespace,
-            [ sort map { "${ns}::$_" } qw{ A C } ],
-            'found all our modules in namespace...',
-        ;
-
-    };
-};
 
 done_testing;

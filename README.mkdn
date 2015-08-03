@@ -8,7 +8,7 @@ MooseX::RelatedNamespace - The great new MooseX::RelatedNamespace!
 
 # VERSION
 
-This document describes version 0.001 of MooseX::RelatedNamespace - released June 29, 2015 as part of MooseX-RelatedNamespace.
+This document describes version 0.001 of MooseX::RelatedNamespace - released August 03, 2015 as part of MooseX-RelatedNamespace.
 
 # SYNOPSIS
 
@@ -24,12 +24,19 @@ This document describes version 0.001 of MooseX::RelatedNamespace - released Jun
 
     # ...is the same as:
     use MooseX::AttributeShortcuts; # for these attributes, at any rate
+    use MooseX::Types::Moose ':all';
     use MooseX::Types::Perl ':all';
 
     has doctor_namespace => (
-        is  => 'lazy',
-        isa => PackageName,
+        is      => 'lazy',
+        isa     => PackageName,
         builder => sub { 'TimeLords::Doctor' },
+    );
+
+    has filter_for_doctor_namespace => (
+        is      => 'lazy',
+        isa     => CodeRef,
+        builder => sub { sub { 1 } },
     );
 
     has modules_in_doctor_namespace => (
@@ -73,6 +80,41 @@ modules to keep, false for modules to drop.
 ## modules\_in\_namespace
 
 The (filtered) list of modules in the namespace.  Lazily generated.
+
+# EXAMPLES
+
+There's a decent example in the ["SYNOPSIS"](#synopsis), but here's a couple variations to demonstrate.
+
+# Defaults
+
+You can use this role without giving it any parameters, and defaults will be used.  In our case,
+this means that this:
+
+    with 'MooseX::RelatedNamespace';
+
+...is effectively the same as:
+
+    use MooseX::AttributeShortcuts;
+    use MooseX::Types::Moose ':all';
+    use MooseX::Types::Perl ':all';
+
+    has namespace => (
+        is       => 'ro',
+        isa      => PackageName,
+        required => 1,
+    );
+
+    has filter_for_namespace => (
+        is      => 'lazy',
+        isa     => 'CodeRef',
+        builder => sub { sub { 1 } } ,
+    );
+
+    has modules_in_namespace => (
+        is      => 'lazy',
+        isa     => ArrayRef[PackageName],
+        builder => sub { ... find/load all modules, filtering ... },
+    );
 
 # BUGS
 
